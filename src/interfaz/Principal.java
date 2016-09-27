@@ -5,6 +5,9 @@
  */
 package interfaz;
 
+import clases.Helper;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,7 +20,13 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Principal
      */
     public Principal() {
+
         initComponents();
+        JButton botonesH[] = {cmdCrear, cmdLimpiar};
+        JButton botonesD[] = {cmdLlenadoAutomatico, cmdLlenadoManual, cmdOperacion};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
+
     }
 
     /**
@@ -32,7 +41,8 @@ public class Principal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        txtResultado = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtResultado = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMatrizResultante = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -61,10 +71,13 @@ public class Principal extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Resultado"));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        txtResultado.setEditable(false);
-        jPanel3.add(txtResultado, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 280, 30));
+        txtResultado.setColumns(20);
+        txtResultado.setRows(5);
+        jScrollPane3.setViewportView(txtResultado);
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 320, 380, 70));
+        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 550, 120));
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 320, 580, 160));
 
         tblMatrizResultante.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,7 +103,7 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 320, 160));
 
-        cmbOperaciones.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cant Números Pares", "Números Pares", "Diagonal Principal", "Letra C", "Letra H" }));
+        cmbOperaciones.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cant Números Pares", "Números Pares", "Diagonal Principal", "Letra C", "Letra H", "Recorrido 1", " " }));
         jPanel1.add(cmbOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 200, 130, -1));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
@@ -155,18 +168,14 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 929, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 8, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(886, 451));
+        setSize(new java.awt.Dimension(945, 552));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -185,35 +194,55 @@ public class Principal extends javax.swing.JFrame {
         tm2.setRowCount(nf);
         tm2.setColumnCount(nc);
 
+        JButton botonesH[] = {cmdLlenadoAutomatico, cmdLlenadoManual, cmdLimpiar};
+        JButton botonesD[] = {cmdCrear, cmdOperacion};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
 
     }//GEN-LAST:event_cmdCrearActionPerformed
 
     private void cmdLlenadoManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLlenadoManualActionPerformed
 
-        /*  double n;
-         int aux, res;
-         boolean sw=true;
-         for (int i = 0; i < v.length; i++) {
-         do {
-         aux = 1;
-         try {
-         n = Double.parseDouble(JOptionPane.showInputDialog(this, "Digite el elemento en la posición: " + i));
-         v[i] = n;
-         } catch (NumberFormatException e) {
-         JOptionPane.showMessageDialog(this, "Digite la información correctamente", "Error", JOptionPane.ERROR_MESSAGE);
-         aux = 0;
-         } catch (NullPointerException e) {
-         res= JOptionPane.showConfirmDialog(this, "¿Desea Salir?", "Salir", JOptionPane.YES_NO_OPTION);
-         if(res == 0){
-         aux = 1;
-         i = v.length;
-         sw = false;
-         }else{
-         aux =0;
-         }
-                   
-         }
-         } while (aux == 0);*/
+        int nf, nc, res, aux;
+        double n;
+        boolean sw = true;
+        nf = tblMatrizInicial.getRowCount();
+        nc = tblMatrizInicial.getColumnCount();
+
+        for (int i = 0; i < nf; i++) {
+            for (int j = 0; j < nc; j++) {
+                do {
+                    aux = 1;
+                    try {
+                        n = Double.parseDouble(Helper.recibirDatos(this, "Digite el elemento en la posición: [" + i + "][" + j + "]"));
+                        tblMatrizInicial.setValueAt(n, i, j);
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(this, "Digite la información correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+                        aux = 0;
+                    } catch (NullPointerException e) {
+                        res = JOptionPane.showConfirmDialog(this, "¿Desea Salir?", "Salir", JOptionPane.YES_NO_OPTION);
+                        System.out.println(res);
+                        if (res == 0) {
+                            aux = 1;
+                            j = nc;
+                            i = nf;
+                            sw = false;
+                            Helper.tablaPorDefecto(tblMatrizInicial);
+                            Helper.tablaPorDefecto(tblMatrizResultante);
+                        } else {
+                            aux = 0;
+                        }
+
+                    }
+                } while (aux == 0);
+
+            }
+
+        }
+        JButton botonesH[] = {cmdOperacion, cmdLimpiar};
+        JButton botonesD[] = {cmdCrear, cmdLlenadoManual, cmdLlenadoAutomatico};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
 
     }//GEN-LAST:event_cmdLlenadoManualActionPerformed
 
@@ -231,21 +260,15 @@ public class Principal extends javax.swing.JFrame {
 
         }
 
+        JButton botonesH[] = {cmdOperacion, cmdLimpiar};
+        JButton botonesD[] = {cmdCrear, cmdLlenadoManual, cmdLlenadoAutomatico};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
     }//GEN-LAST:event_cmdLlenadoAutomaticoActionPerformed
 
     private void cmdLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLimpiarActionPerformed
-        int nf, nc;
-        nf = tblMatrizInicial.getRowCount();
-        nc = tblMatrizInicial.getColumnCount();
-
-        for (int i = 0; i < nf; i++) {
-            for (int j = 0; j < nc; j++) {
-
-                tblMatrizInicial.setValueAt("", i, j);
-                tblMatrizResultante.setValueAt("", i, j);
-            }
-
-        }
+        Helper.tablaPorDefecto(tblMatrizInicial);
+        Helper.tablaPorDefecto(tblMatrizResultante);
 
         txtNumeroFilas.setText("");
         txtNumeroColumnas.setText("");
@@ -253,89 +276,54 @@ public class Principal extends javax.swing.JFrame {
         cmbOperaciones.setSelectedIndex(0);
         txtResultado.setText("");
 
+        JButton botonesH[] = {cmdCrear, cmdLimpiar};
+        JButton botonesD[] = {cmdLlenadoAutomatico, cmdLlenadoManual, cmdOperacion};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
     }//GEN-LAST:event_cmdLimpiarActionPerformed
 
     private void cmdOperacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOperacionActionPerformed
-        int op, nf, nc, cont, aux;
+        int op, nf, nc, pares, aux;
 
         op = cmbOperaciones.getSelectedIndex();
         nf = tblMatrizInicial.getRowCount();
         nc = tblMatrizInicial.getColumnCount();
-        cont = 0;
 
+        Helper.limpiarTabla(tblMatrizResultante);
         switch (op) {
             case 0:
-                for (int i = 0; i < nf; i++) {
-                    for (int j = 0; j < nc; j++) {
-
-                        aux = (int) tblMatrizInicial.getValueAt(i, j);
-                        if (aux % 2 == 0) {
-                            cont++;
-                        }
-
-                    }
-
-                }
-                txtResultado.setText("Cantidad de Números pares es: " + cont);
+                pares = Helper.cantidadNumerosPares(tblMatrizInicial);
+                txtResultado.setText("Cantidad de Números pares es: " + pares);
                 break;
             case 1:
-                for (int i = 0; i < nf; i++) {
-                    for (int j = 0; j < nc; j++) {
-
-                        aux = (int) tblMatrizInicial.getValueAt(i, j);
-                        if (aux % 2 == 0) {
-                            tblMatrizResultante.setValueAt(aux, i, j);
-                        }
-
-                    }
-
-                }
+                Helper.numerosPares(tblMatrizInicial, tblMatrizResultante);
                 break;
             case 2:
-                for (int i = 0; i < nf; i++) {
-                    for (int j = 0; j < nc; j++) {
 
-                        aux = (int) tblMatrizInicial.getValueAt(i, j);
-                        if (i == j) {
-                            tblMatrizResultante.setValueAt(aux, i, j);
-                        }
-
-                    }
-
-                }
+                Helper.diagonalPrincipal(tblMatrizInicial, tblMatrizResultante);
 
                 break;
             case 3:
-                for (int i = 0; i < nf; i++) {
-                    for (int j = 0; j < nc; j++) {
-
-                        aux = (int) tblMatrizInicial.getValueAt(i, j);
-                        if (i == 0 || j == 0 || i ==nf -1 ) {
-                            tblMatrizResultante.setValueAt(aux, i, j);
-                        }
-
-                    }
-
-                }
+                Helper.letraC(tblMatrizInicial, tblMatrizResultante);
 
                 break;
-                case 4:
-                for (int i = 0; i < nf; i++) {
-                    for (int j = 0; j < nc; j++) {
+            case 4:
 
-                        aux = (int) tblMatrizInicial.getValueAt(i, j);
-                        if (j == 0 || j == nc -1 || i == (nf-1)/2  ) {
-                            tblMatrizResultante.setValueAt(aux, i, j);
-                        }
+                Helper.letraH(tblMatrizInicial, tblMatrizResultante);
 
-                    }
+                break;
+                
+                case 5:
 
-                }
+                    System.out.println(Helper.recorrido1(tblMatrizInicial));
 
                 break;
         }
 
-
+        JButton botonesH[] = {cmdOperacion, cmdLimpiar};
+        JButton botonesD[] = {cmdCrear, cmdLlenadoAutomatico, cmdLlenadoManual};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
     }//GEN-LAST:event_cmdOperacionActionPerformed
 
     /**
@@ -389,10 +377,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblMatrizInicial;
     private javax.swing.JTable tblMatrizResultante;
     private javax.swing.JTextField txtNumeroColumnas;
     private javax.swing.JTextField txtNumeroFilas;
-    private javax.swing.JTextField txtResultado;
+    private javax.swing.JTextArea txtResultado;
     // End of variables declaration//GEN-END:variables
 }
