@@ -71,6 +71,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Resultado"));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        txtResultado.setEditable(false);
         txtResultado.setColumns(20);
         txtResultado.setRows(5);
         jScrollPane3.setViewportView(txtResultado);
@@ -87,6 +88,7 @@ public class Principal extends javax.swing.JFrame {
 
             }
         ));
+        tblMatrizResultante.setEnabled(false);
         jScrollPane1.setViewportView(tblMatrizResultante);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 140, 320, 160));
@@ -99,11 +101,12 @@ public class Principal extends javax.swing.JFrame {
 
             }
         ));
+        tblMatrizInicial.setEnabled(false);
         jScrollPane2.setViewportView(tblMatrizInicial);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 320, 160));
 
-        cmbOperaciones.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cant Números Pares", "Números Pares", "Diagonal Principal", "Letra C", "Letra H", "Recorrido 1", " " }));
+        cmbOperaciones.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cant Números Pares", "Números Pares", "Diagonal Principal", "Letra C", "Letra H", "Recorrido uno", "Recorrido dos", " " }));
         jPanel1.add(cmbOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 200, 130, -1));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
@@ -215,7 +218,7 @@ public class Principal extends javax.swing.JFrame {
                     aux = 1;
                     try {
                         n = Double.parseDouble(Helper.recibirDatos(this, "Digite el elemento en la posición: [" + i + "][" + j + "]"));
-                        tblMatrizInicial.setValueAt(n, i, j);
+                        tblMatrizInicial.setValueAt((int)n, i, j);
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(this, "Digite la información correctamente", "Error", JOptionPane.ERROR_MESSAGE);
                         aux = 0;

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package clases;
 
 import java.awt.Component;
@@ -11,10 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author rmorales1
- */
+
 public class Helper {
 
     public static int mensaje(Component ventana, String info, String titulo, int tipo) {
@@ -201,6 +194,121 @@ public class Helper {
             }
         }
         return m;
+    }
+    
+    public static String recorridoHaciaArriba (int m[][], int j){
+        String aux="";
+        int nf = m.length;
+        
+        for (int i = (nf-1); i >= 0; i--){
+            int[] is = m[i];
+            aux = aux + m[i][j]+" ";
+        } 
+        return aux;
+    }
+    
+    public static String recorridoHaciaArriba (int m[][], int j, int in, int f){
+        String aux="";
+        int nf = m.length;
+        
+        for (int i = in; i < f; i++){
+            aux = aux + m[i][j]+" ";
+        } 
+        return aux;
+    }
+    
+    public static String recorridoHaciaAbajo (int m[][], int j){
+        String aux="";
+        int nf = m.length;
+        
+        for (int i = 0; i < nf; i++){
+            aux = aux + m[i][j]+" ";
+        }
+        return aux;
+    }
+    
+    public static String recorridoHaciaAbajo (int m[][], int j, int in, int f){
+        String aux="";
+        int nf = m.length;
+        
+        for (int i = in; i < f; i++){
+            aux = aux + m[i][j]+" ";
+        }
+        return aux;
+    }
+    
+    public static String recorridoUno (JTable tabla1){
+        int m[][] = pasarDatosMatriz(tabla1);
+        int nf = m.length;
+        int nc = m[0].length;
+        String aux = "";
+        
+        for (int j = 0; j < nc; j++){
+            if(j%2 == 0){
+                aux = aux + Helper.recorridoHaciaArriba(m, j);
+            }else{
+                aux = aux + Helper.recorridoHaciaAbajo(m, j);
+            }
+        }
+        aux = aux.substring(0, aux.length()-2);
+        return aux;
+    }
+    
+    public static String recorridoDerecha (int m[][], int i){
+        String aux = "";
+        int nc = m.length;
+        
+        for (int j = 0; j < nc; j++){
+            aux = + m[i][j]+" ";
+        }
+        return aux;
+    }
+    
+    public static String recorridoDerecha (int m[][], int i, int in, int f){
+        String aux = "";
+        int nc = m.length;
+        
+        for (int j = in; j < f; j++){
+            aux = + m[i][j]+" ";
+        }
+        return aux;
+    }
+    
+    public static String recorridoIzquierda (int m[][], int i){
+        String aux = "";
+        int nc = m[0].length;
+        
+        for (int j = (nc-1); j >= 0; j--){
+            aux = aux + m[i][j]+" ";
+        }
+        return aux;
+    }
+    
+    public static String recorridoIzquierda (int m[][], int i, int in, int f){
+        String aux = "";
+        int nc = m[0].length;
+        
+        for (int j = in; j < f; j--){
+            aux = aux + m[i][j]+" ";
+        }
+        return aux;
+    }
+    
+    public static String recorridoDos (JTable tabla1){
+        int m[][] = pasarDatosMatriz(tabla1);
+        int nf = m.length;
+        int nc = m.length;
+        String aux = "";
+        
+        for (int i = 0; i < nf; i++){
+            if(i%2 == 0){
+                aux = aux + Helper.recorridoIzquierda(m, i);
+            }else{
+                aux = aux + Helper.recorridoDerecha(m, i);
+            }
+        }
+        aux = aux.substring(0, aux.length()-2);
+        return aux;
     }
 
 }
